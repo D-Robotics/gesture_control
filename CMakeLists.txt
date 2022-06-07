@@ -53,7 +53,7 @@ install(TARGETS ${PROJECT_NAME}
 
 install(DIRECTORY
   ${PROJECT_SOURCE_DIR}/launch/
-  DESTINATION lib/${PROJECT_NAME}/launch)
+  DESTINATION share/${PROJECT_NAME}/launch)
 
 install(FILES
   ${PROJECT_SOURCE_DIR}/README.md

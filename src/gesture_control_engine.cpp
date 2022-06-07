@@ -46,6 +46,11 @@ GestureControlEngine::GestureControlEngine() {
         lg.unlock();
         RunStrategy(smart_frame);
       }
+
+      // 退出前发布停止运动指令，避免程序退出后机器人还一直处于运动状态（如果最后一次收到的指令是启动运动并且运动控制模块没有做超时管理）
+      RCLCPP_WARN(rclcpp::get_logger("GestureControlEngine"),
+                  "pkg exit! cancel move");
+      CancelMove();
     });
   }
 }
