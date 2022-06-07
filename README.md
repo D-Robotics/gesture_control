@@ -149,7 +149,7 @@ cp -r install/lib/mono2d_body_detection/config/ .
 cp -r install/lib/hand_lmk_detection/config/ .
 cp -r install/lib/hand_gesture_detection/config/ .
 
-ros2 launch install/lib/gesture_control/launch/hobot_gesture_control.launch.py
+ros2 launch install/share/gesture_control/launch/hobot_gesture_control.launch.py
 ```
 
 ### **Linux**
