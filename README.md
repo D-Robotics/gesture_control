@@ -10,12 +10,12 @@ gesture_control package功能为通过手势控制机器人运动。
 
 | 手势名称              | 功能定义 | 手势动作举例                                     |
 | --------------------- | -------- | ------------------------------------------------ |
-| 666手势/Awesome       | 前进     | ![image-awesome](images/image-awesome.png)       |
-| yeah/Victory          | 后退     | ![image-palm](images/image-victory.png)          |
-| 大拇指向右/ThumbRight | 右转     | ![image-thumbright](images/image-thumbright.png) |
-| 大拇指向左/ThumbLeft  | 左转     | ![image-thumbleft](images/image-thumbleft.png)   |
-| OK/Okay               | 唤醒     | ![image-ok.png](images/image-ok.png)             |
-| 手掌/Palm             | 重置     | ![image-palm](images/image-palm.png)             |
+| 666手势/Awesome       | 前进     | ![image-awesome](images/image-awesome.jpg)       |
+| yeah/Victory          | 后退     | ![image-victory](images/image-victory.jpg)          |
+| 大拇指向右/ThumbRight | 右转     | ![image-thumbright](images/image-thumbright.jpg) |
+| 大拇指向左/ThumbLeft  | 左转     | ![image-thumbleft](images/image-thumbleft.jpg)   |
+| OK/Okay               | 唤醒     | ![image-ok](images/image-ok.jpg)             |
+| 手掌/Palm             | 重置     | ![image-palm](images/image-palm.jpg)             |
 
 其中点赞、yeah、大拇指向右和大拇指向左4种手势用于控制机器人前后或旋转运动。OK手势用于手势控制唤醒功能，手掌手势用于重置控制功能。
 
