@@ -1,127 +1,214 @@
 # 功能介绍
 
-gesture_control package功能为通过手势控制机器人运动。
+小车手势控制App功能为通过手势控制机器人小车运动，包括左右旋转和前后平移运动。支持的控制手势，对应的手势功能定义和手势动作举例如下：
 
-订阅智能结果ai_msgs，运行策略，确定控制hand并根据手势控制机器人运动。
+666手势/Awesome —— 前进：
 
-通过发布消息直接控制机器人旋转和平移运动。
+ ![](./images/image-awesome.jpeg)
 
-支持的控制手势和手势功能定义如下表格：
+yeah/Victory —— 后退：
 
-| 手势名称              | 功能定义 | 手势动作举例                                     |
-| --------------------- | -------- | ------------------------------------------------ |
-| 666手势/Awesome       | 前进     | ![image-awesome](images/image-awesome.jpg)       |
-| yeah/Victory          | 后退     | ![image-victory](images/image-victory.jpg)          |
-| 大拇指向右/ThumbRight | 右转     | ![image-thumbright](images/image-thumbright.jpg) |
-| 大拇指向左/ThumbLeft  | 左转     | ![image-thumbleft](images/image-thumbleft.jpg)   |
-| OK/Okay               | 唤醒     | ![image-ok](images/image-ok.jpg)             |
-| 手掌/Palm             | 重置     | ![image-palm](images/image-palm.jpg)             |
+ ![](./images/image-victory.jpeg)
 
-其中点赞、yeah、大拇指向右和大拇指向左4种手势用于控制机器人前后或旋转运动。OK手势用于手势控制唤醒功能，手掌手势用于重置控制功能。
+大拇指向右/ThumbRight —— 右转：
 
-## 唤醒手势
+ ![](./images/image-thumbright.jpeg)
 
-唤醒手势用于唤醒通过手势控制机器人的功能。
+大拇指向左/ThumbLeft —— 左转：
 
-当启用唤醒手势时，只有做了唤醒手势的hand才能通过4种控制手势控制机器人。一般用于人较多，环境复杂的场景，通过启用唤醒手势避免误触发手势控制功能。
+ ![](./images/image-thumbleft.jpeg)
 
-当未启用唤醒手势时，直接通过上述4种控制手势触发控制机器人功能。
+APP以PC端Gazebo仿真环境下的虚拟小车举例，发布的控制指令也可以直接用于控制实物小车。
 
-## 重置手势
+代码仓库：<https://github.com/HorizonRDK/gesture_control>
 
-重置手势用于重置手势控制机器人的功能。只有当启用了唤醒手势时，重置手势才有效。
+应用场景：手势控制模块是人机交互的重要组成部分，主要应用于人机交互、游戏娱乐等领域。
 
-当识别到控制手作出重置手势时，重置手势控制功能，重新选择控制手。
+# 机器人实物
 
-## 控制手（controler）的选择
+## 物料清单
 
-当启用唤醒手势时，做唤醒手势的hand会作为controler，只有这个hand做手势才能控制机器人运动。
+以下机器人均已适配RDK X3
 
-当未启用唤醒手势时，选择做了上述4种控制手势的hand作为controler。
+| 机器人名称          | 生产厂家 | 参考链接                                                     |
+| :------------------ | -------- | ------------------------------------------------------------ |
+| OriginBot智能机器人 | 古月居   | [点击跳转](https://www.originbot.org/)                       |
+| X3派机器人          | 轮趣科技 | [点击跳转](https://item.taobao.com/item.htm?spm=a230r.1.14.17.55e556912LPGGx&id=676436236906&ns=1&abbucket=12#detail) |
+| 履带智能车          | 微雪电子 | [点击跳转](https://detail.tmall.com/item.htm?abbucket=9&id=696078152772&rn=4d81bea40d392509d4a5153fb2c65a35&spm=a1z10.5-b-s.w4011-22714387486.159.12d33742lJtqRk) |
+| RDK X3 Robot        | 亚博智能 | [点击跳转](https://detail.tmall.com/item.htm?id=726857243156&scene=taobao_shop&spm=a1z10.1-b-s.w5003-22651379998.21.421044e12Yqrjm) |
 
-选择控制手时，如果有多个hand同时做手势，选择hand检测框宽度最大的hand作为controler。
+## 使用方法
 
-已有controler的情况下，其他hand做唤醒手势或者控制手势都无效。
+### 准备工作
 
-只有当作为controler的hand消失或者做出重置手势时，才会重新寻找新的controler。连续track_serial_lost_num_thr（默认100）帧未检测到hand，判断hand（controler）消失。
+1. 机器人具备运动底盘、相机及RDK套件，硬件已经连接并测试完毕；
+2. 已有ROS底层驱动，机器人可接收“/cmd_vel”指令运动，并根据指令正确运动。
 
-## 控制策略
+### 机器人组装
+以下操作过程以OriginBot为例，满足条件的其他机器人使用方法类似。参考机器人官网的[使用指引](https://www.originbot.org/guide/quick_guide/)，完成机器人的硬件组装、镜像烧写及示例运行，确认机器人的基础功能可以顺利运行。
 
-已找到作为controler的hand后，对于每一帧输入的智能结果处理策略如下：
+### 安装功能包
+**1.参考[OriginBot说明](https://github.com/nodehubs/originbot_minimal/blob/develop/README.md)，完成Originbit基础功能安装**
 
-当前帧中无此控制手，停止机器人运动。
+**2.安装功能包**
 
-当前帧中有此控制手，判断此hand有无控制手势，如无，停止机器人运动，如有，控制机器人做对应的运动。
+启动机器人后，通过终端或者VNC连接机器人，点击本页面右上方的“一键部署”按钮，复制如下命令在RDK的系统上运行，完成相关Node的安装。
 
-# 编译
-
-## 依赖库
-
-ros package：
-
-\- ai_msgs
-
-ai_msgs为自定义的消息格式，用于算法模型推理后，发布推理结果，ai_msgs pkg定义在hobot_msgs中。
-
-## 开发环境
-
-\- 编程语言: C/C++
-
-\- 开发平台: X3/X86
-
-\- 系统版本：Ubuntu 20.0.4
-
-\- 编译工具链:Linux GCC 9.3.0/Linaro GCC 9.3.0
-
-## **编译**
-
- 支持在X3 Ubuntu系统上编译和在PC上使用docker交叉编译两种方式。
-
-### **Ubuntu板端编译**
-
-1. 编译环境确认 
-   - 板端已安装X3 Ubuntu系统。
-   - 当前编译终端已设置TogetherROS环境变量：`source PATH/setup.bash`。其中PATH为TogetherROS的安装路径。
-   - 已安装ROS2编译工具colcon，安装命令：`pip install -U colcon-common-extensions`
-2. 编译
-
-编译命令：`colcon build --packages-select gesture_control`
-
-### Docker交叉编译
-
-1. 编译环境确认
-
-   - 在docker中编译，并且docker中已经安装好TogetherROS。docker安装、交叉编译说明、TogetherROS编译和部署说明详见机器人开发平台robot_dev_config repo中的README.md。
-
-2. 编译
-
-   - 编译命令：
-
-```
-export TARGET_ARCH=aarch64
-export TARGET_TRIPLE=aarch64-linux-gnu
-export CROSS_COMPILE=/usr/bin/$TARGET_TRIPLE-
-
-colcon build --packages-select gesture_control \
-   --merge-install \
-   --cmake-force-configure \
-   --cmake-args \
-   --no-warn-unused-cli \
-   -DCMAKE_TOOLCHAIN_FILE=`pwd`/robot_dev_config/aarch64_toolchainfile.cmake
+```bash
+sudo apt update
+sudo apt install -y tros-gesture-control
 ```
 
-## 注意事项
+### 运行手势控制功能
 
-# 使用介绍
+**1.启动机器人底盘**
 
-## 依赖
+启动机器人，如OriginBot的启动命令如下：
 
-- mipi_cam package：发布图片msg
-- hobot_codec package：jpeg图片编码&发布
-- mono2d_body_detection package：发布人体、人头、人脸、人手框感知msg
-- hand_lmk_detection package：发布人手关键点感知msg
-- hand_gesture_detection package：发布手势识别结果msg
-- websocket package：渲染图片和ai感知msg
+```bash
+source /opt/tros/setup.bash
+ros2 launch originbot_base robot.launch.py 
+```
+
+**2.启动手势控制**
+
+启动一个新的终端，通过如下指令启动人体跟随功能：
+```shell
+# 配置tros.b环境
+source /opt/tros/setup.bash
+
+# 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
+cp -r /opt/tros/lib/mono2d_body_detection/config/ .
+cp -r /opt/tros/lib/hand_lmk_detection/config/ .
+cp -r /opt/tros/lib/hand_gesture_detection/config/ .
+
+# 配置MIPI摄像头
+export CAM_TYPE=mipi
+
+# 启动launch文件
+ros2 launch gesture_control gesture_control.launch.py
+```
+
+启动成功后，站在机器人摄像头前，需要让机器人识别到手部，运行小车手势控制App后，通过“666手势/Awesome”手势控制小车前进，“yeah/Victory”手势控制小车后退，“大拇指向右/ThumbRight”手势控制小车右转，“大拇指向左/ThumbLeft”手势控制小车左转。其中左转/右转分别是向人的左/右方向（大拇指的指向）转动。
+
+**3.查看视觉识别效果**
+
+打开同一网络电脑的浏览器，访问IP地址（浏览器输入http://IP:8000，IP为地平线RDK的IP地址），即可看到视觉识别的实时效果。
+
+# Gazebo仿真
+
+Gazebo仿真适用于持有RDK X3但没有机器人实物的开发者体验功能。
+
+## 物料清单
+
+| 机器人名称          | 生产厂家 | 参考链接                                                     |
+| :------------------ | -------- | ------------------------------------------------------------ |
+| RDK X3             | 多厂家 | [点击跳转](https://developer.horizon.cc/sunrise) |
+
+## 使用方法
+
+### 准备工作
+
+在体验之前，需要具备以下基本条件：
+
+- 开发者有RDK套件实物，及配套的相机
+- PC电脑端已经完成ROS Gazebo及Turtlebot机器人相关功能包安装
+- 和地平线RDK在同一网段（有线或者连接同一无线网，IP地址前三段需保持一致）的PC，PC端需要安装的环境包括：
+
+- Ubuntu 20.04系统
+
+- [ROS2 Foxy桌面版](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html)
+
+- Gazebo和Turtlebot3相关的功能包，安装方法：
+
+   ```shell
+   sudo apt-get install ros-foxy-gazebo-*
+   sudo apt install ros-foxy-turtlebot3
+   sudo apt install ros-foxy-turtlebot3-simulations
+
+### 安装功能包
+
+启动RDK X3后，通过终端或者VNC连接机器人，点击[NodeHub](http://it-dev.horizon.ai/nodehubDetail/167289845913411076)右上方的“一键部署”按钮，复制如下命令在RDK的系统上运行，完成人体跟随相关Node的安装。
+
+```bash
+sudo apt update
+sudo apt install -y tros-gesture-control
+```
+
+### 运行人体跟随功能
+
+**1.启动仿真环境及机器人**
+
+在PC端Ubuntu的终端中使用如下命令启动Gazebo，并加载机器人模型：
+
+```bash
+source /opt/ros/foxy/setup.bash
+export TURTLEBOT3_MODEL=burger
+ros2 launch turtlebot3_gazebo empty_world.launch.py
+```
+
+启动成功后，仿真环境中小车效果如下：
+
+![](./images/gazebo.jpeg)
+
+**2.启动手势控制**
+
+在RDK的系统中，启动终端，通过如下指令启动功能：
+
+```shell
+# 配置tros.b环境
+source /opt/tros/setup.bash
+
+# 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
+cp -r /opt/tros/lib/mono2d_body_detection/config/ .
+cp -r /opt/tros/lib/hand_lmk_detection/config/ .
+cp -r /opt/tros/lib/hand_gesture_detection/config/ .
+
+# 配置MIPI摄像头
+export CAM_TYPE=mipi
+
+# 启动launch文件
+ros2 launch gesture_control gesture_control.launch.py
+```
+
+启动成功后，站在机器人摄像头前，需要让机器人识别到手部，运行小车手势控制App后，通过“666手势/Awesome”手势控制小车前进，“yeah/Victory”手势控制小车后退，“大拇指向右/ThumbRight”手势控制小车右转，“大拇指向左/ThumbLeft”手势控制小车左转。其中左转/右转分别是向人的左/右方向（大拇指的指向）转动[点击跳转](https://developer.horizon.cc/api/v1/fileData/documents_tros/app/car_gesture_control.html)
+
+**3.查看视觉识别效果**
+
+打开同一网络电脑的浏览器，访问IP地址（浏览器输入http://IP:8000，IP为地平线RDK的IP地址），即可看到视觉识别的实时效果。 
+
+# 接口说明
+
+## 话题
+
+人体识别和手势唤醒的结果都通过[hobot_msgs/ai_msgs/msg/PerceptionTargets](https://github.com/HorizonRDK/hobot_msgs/blob/develop/ai_msgs/msg/Target.msg)话题发布，该话题的详细定义如下：
+
+```
+# 消息头
+std_msgs/Header header
+
+# 感知结果的处理帧率
+int16 fps
+
+# 性能统计信息，比如记录每个模型推理的耗时
+Perf[] perfs
+
+# 感知目标集合
+Target[] targets
+
+# 消失目标集合
+Target[] disappeared_targets
+```
+
+
+| 名称                          | 消息类型                                                     | 说明                                                   |
+| ----------------------------- | ------------------------------------------------------------ | ------------------------------------------------------ |
+| /cmd_vel                      | geometry_msgs/msg/Twist                                      | 发布控制机器人移动的速度指令                           |
+| /hobot_mono2d_body_detection  | [hobot_msgs/ai_msgs/msg/PerceptionTargets](hobot_msgs/ai_msgs/msg/PerceptionTargets) | 发布识别到的人体目标信息                               |
+| /hobot_hand_gesture_detection | [hobot_msgs/ai_msgs/msg/PerceptionTargets](hobot_msgs/ai_msgs/msg/PerceptionTargets) | 发布识别到的手势目标信息（开启手势唤醒之后才会出现）   |
+| /hobot_hand_lmk_detection     | [hobot_msgs/ai_msgs/msg/PerceptionTargets](hobot_msgs/ai_msgs/msg/PerceptionTargets) | 发布识别到的手势关键点信息（开启手势唤醒之后才会出现） |
+
+
 
 ## 参数
 
@@ -134,87 +221,17 @@ colcon build --packages-select gesture_control \
 | twist_pub_topic_name      | std::string | 发布Twist类型的运动控制消息的topic名           | 否       | 根据实际部署环境配置。一般机器人订阅的topic为/cmd_vel，ROS2 turtlesim示例订阅的topic为turtle1/cmd_vel。 | /cmd_vel                      | 否                     |
 | ai_msg_sub_topic_name     | std::string | 订阅包含手势识别结果的AI消息的topic名          | 否       | 根据实际部署环境配置                                                                                    | /hobot_hand_gesture_detection | 否                     |
 
-## 运行
+# 原理简介
+APP由MIPI图像采集、人体检测和跟踪、人手关键点检测、手势识别、手势控制策略、图像编解码、Web展示端组成，流程如下图：
 
-编译成功后，将生成的install路径拷贝到地平线X3开发板上（如果是在X3上编译，忽略拷贝步骤），并执行如下命令运行：
+![](./images/gesture_ctrl_workflow.jpg)
 
-### **Ubuntu**
+# 参考资料
 
-```
-export COLCON_CURRENT_PREFIX=./install
-source ./install/setup.bash
-# config中为示例使用的模型，根据实际安装路径进行拷贝
-# 如果是板端编译（无--merge-install编译选项），拷贝命令为cp -r install/PKG_NAME/lib/PKG_NAME/config/ .，其中PKG_NAME为具体的package名。
-cp -r install/lib/mono2d_body_detection/config/ .
-cp -r install/lib/hand_lmk_detection/config/ .
-cp -r install/lib/hand_gesture_detection/config/ .
-
-ros2 launch install/share/gesture_control/launch/gesture_control.launch.py
-```
-
-### **Linux**
-
-```
-export ROS_LOG_DIR=/userdata/
-export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:./install/lib/
-
-# config中为示例使用的模型，根据实际安装路径进行拷贝
-cp -r install/lib/mono2d_body_detection/config/ .
-cp -r install/lib/hand_lmk_detection/config/ .
-cp -r install/lib/hand_gesture_detection/config/ .
-
-# 启动图片发布pkg
-./install/lib/mipi_cam/mipi_cam --ros-args -p out_format:=nv12 -p image_width:=960 -p image_height:=544 -p io_method:=shared_mem --log-level error &
-# 启动jpeg图片编码&发布pkg
-./install/lib/hobot_codec/hobot_codec_republish --ros-args -p channel:=1 -p in_mode:=shared_mem -p in_format:=nv12 -p out_mode:=ros -p out_format:=jpeg -p sub_topic:=/hbmem_img -p pub_topic:=/image_jpeg --ros-args --log-level error &
-# 启动单目rgb人体、人头、人脸、人手框和人体关键点检测pkg
-./install/lib/mono2d_body_detection/mono2d_body_detection --ros-args --log-level error &
-# 启动人手关键点检测pkg
-./install/lib/hand_lmk_detection/hand_lmk_detection --ros-args --log-level error &
-# 启动web展示pkg
-./install/lib/websocket/websocket --ros-args -p image_topic:=/image_jpeg -p image_type:=mjpeg -p smart_topic:=/hobot_hand_gesture_detection --log-level error &
-
-# 启动手势识别pkg
-./install/lib/hand_gesture_detection/hand_gesture_detection --log-level error &
-
-# 启动手势交互pkg
-./install/lib/gesture_control/gesture_control
-```
-
-## 注意事项
-
-1. 板端使用launch启动，需要安装依赖，安装命令：`pip3 install lark-parser`。设备上只需要配置一次，断电重启不需要重新配置。
-2. 启动小车运动pkg，需要配置驱动：`cp install/lib/xrrobot/config/58-xrdev.rules /etc/udev/rules.d/`，拷贝后重启X3开发板。设备上只需要配置一次，断电重启不需要重新配置。
-3. 第一次运行web展示需要启动webserver服务，运行方法为:
-
-- cd 到websocket的部署路径下：`cd install/lib/websocket/webservice/`（如果是板端编译（无--merge-install编译选项）执行命令为`cd install/websocket/lib/websocket/webservice`）
-- 启动nginx：`chmod +x ./sbin/nginx && ./sbin/nginx -p .`
-- 设备重启需要重新配置。
-
-# 结果分析
-
-## X3结果展示
-
-```
-
-[gesture_control-7] [WARN] [1652965757.145607222] [GestureControlEngine]: Gesture contrl start!, track_id: 2, frame_ts_ms: 3698315325, tracking_sta(0:INITING, 1:TRACKING, 2:LOST): 1, gesture: 11
-[gesture_control-7] [WARN] [1652965757.159500951] [GestureControlEngine]: frame_ts_ms: 3698315358, track_id: 2, tracking_sta: 1, gesture: 14
-[gesture_control-7] [WARN] [1652965757.159660358] [GestureControlEngine]: do move, direction: 0, step: 0.500000
-[gesture_control-7] [WARN] [1652965757.211420964] [GestureControlEngine]: frame_ts_ms: 3698315425, track_id: 2, tracking_sta: 1, gesture: 14
-[gesture_control-7] [WARN] [1652965757.211624899] [GestureControlEngine]: do move, direction: 0, step: 0.500000
-[gesture_control-7] [WARN] [1652965757.232051230] [GestureControlEngine]: frame_ts_ms: 3698315457, track_id: 2, tracking_sta: 1, gesture: 14
-[gesture_control-7] [WARN] [1652965757.232207513] [GestureControlEngine]: do move, direction: 0, step: 0.500000
-[gesture_control-7] [WARN] [1652965757.595528850] [GestureControlEngine]: frame_ts_ms 3698315655, track id: 2 recved reset gesture: 5
-[gesture_control-7] [WARN] [1652965757.595700337] [GestureControlEngine]: cancel move
-```
-
-以上log截取了部分通过手势控制小车运动的处理结果。由于launch文件中配置启用了手势激活功能，在时间戳frame_ts_ms: 3698315325的帧中，通过OK手势（gesture: 11）激活了手势控制功能，从时间戳frame_ts_ms: 3698315358开始通过666手势（gesture: 14）控制小车以0.5m/s的速度前进运动（do move, direction: 0, step: 0.500000）。在时间戳frame_ts_ms 3698315655的帧中，通过手掌手势（gesture: 5）重置了小车运动控制功能，同时使小车停止运动（cancel move）。
-
-## web效果展示
-
-
+手势控制参考：[开发者说 | 地平线程序员奶爸带你玩转机器人开发平台 —— 第一期 手势控制](https://developer.horizon.cc/forumDetail/98129540173361326) 
 
 # 常见问题
+
 1、Ubuntu下运行启动命令报错`-bash: ros2: command not found`
 
 当前终端未设置ROS2环境，执行命令配置环境：
