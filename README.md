@@ -166,7 +166,7 @@ ros2 launch gesture_control gesture_control.launch.py
 
 **3.查看视觉识别效果**
 
-打开同一网络电脑的浏览器，访问IP地址（浏览器输入http://IP:8000，IP为地平线RDK的IP地址），即可看到视觉识别的实时效果。 
+打开同一网络电脑的浏览器,访问[http://IP:8000](http://IP:8000)即可看到视觉识别的实时效果，其中IP为RDK的IP地址。 
 
 # 接口说明
 
