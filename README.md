@@ -1,115 +1,112 @@
-# 功能介绍
+English| [简体中文](./README_cn.md)
 
-通过视觉进行人手检测、跟踪和手势识别，根据手势类别生成不同运动控制指令并控制机器人运动，包括左右旋转和前后平移运动。该功能支持机器人实物和Gazebo仿真两种体验方式。
+# Function Introduction
 
-支持的控制手势和对应的功能定义如下：
-| 图示                                 | 手势 | 功能定义                                                     |
-| ------------------------------------ | ---- | ------------------------------------------------------------ |
-| ![](./images/image-awesome.jpeg)     | 666手势/Awesome   | 前进                      |
-| ![](./images/image-victory.jpeg) | Yeah/Victory | 后退 |
-| ![](./images/image-thumbright.jpeg) | 大拇指向右/ThumbRight | 右转 |
-| ![](./images/image-thumbleft.jpeg) | 大拇指向左/ThumbLeft | 左转 |
+Detect, track, and recognize hand gestures visually, generate different motion control commands based on gesture categories, and control robot movements, including left and right rotation, and forward and backward translation. This function supports two types of experiences: physical robot and Gazebo simulation.
 
-# 机器人实物
+The supported control gestures and their corresponding function definitions are as follows:
+| Icon                               | Gesture        | Function Definition |
+| ---------------------------------- | -------------- | -------------------- |
+| ![](./images/image-awesome.jpeg)   | 666 Gesture/Awesome | Forward              |
+| ![](./images/image-victory.jpeg)   | Yeah/Victory   | Backward             |
+| ![](./images/image-thumbright.jpeg) | Thumb Right    | Right Turn           |
+| ![](./images/image-thumbleft.jpeg) | Thumb Left     | Left Turn            |
 
-## 物料清单
+# Physical Robot
 
-以下机器人均已适配RDK X3。
+## Bill of Materials
 
-| 机器人名称          | 生产厂家 | 参考链接                                                     |
-| :------------------ | -------- | ------------------------------------------------------------ |
-| OriginBot智能机器人 | 古月居   | [点击跳转](https://www.originbot.org/)                       |
-| X3派机器人          | 轮趣科技 | [点击跳转](https://item.taobao.com/item.htm?spm=a230r.1.14.17.55e556912LPGGx&id=676436236906&ns=1&abbucket=12#detail) |
-| 履带智能车          | 微雪电子 | [点击跳转](https://detail.tmall.com/item.htm?abbucket=9&id=696078152772&rn=4d81bea40d392509d4a5153fb2c65a35&spm=a1z10.5-b-s.w4011-22714387486.159.12d33742lJtqRk) |
-| RDK X3 Robot        | 亚博智能 | [点击跳转](https://detail.tmall.com/item.htm?id=726857243156&scene=taobao_shop&spm=a1z10.1-b-s.w5003-22651379998.21.421044e12Yqrjm) |
+The following robots are all compatible with RDK X3.
+| Robot Name          | Manufacturer | Reference Link                                                |
+| :------------------ | ----------- | ------------------------------------------------------------- |
+| OriginBot Smart Robot | Gu Yue Ju  | [Click to jump](https://www.originbot.org/)                   |
+| X3 Paired Robot       | FunTech     | [Click to jump](https://item.taobao.com/item.htm?spm=a230r.1.14.17.55e556912LPGGx&id=676436236906&ns=1&abbucket=12#detail) |
+| Tracked Smart Car     | Wei Xue Electronics | [Click to jump](https://detail.tmall.com/item.htm?abbucket=9&id=696078152772&rn=4d81bea40d392509d4a5153fb2c65a35&spm=a1z10.5-b-s.w4011-22714387486.159.12d33742lJtqRk) |
+| RDK X3 Robot          | YahBot Intelligence | [Click to jump](https://detail.tmall.com/item.htm?id=726857243156&scene=taobao_shop&spm=a1z10.1-b-s.w5003-22651379998.21.421044e12Yqrjm) |
 
-## 使用方法
+## Instructions on Use
 
-### 准备工作
+### Preparation
 
-1. 机器人具备运动底盘、相机及RDK套件，硬件已经连接并测试完毕；
-2. 已有ROS底层驱动，机器人可接收`/cmd_vel`指令运动，并根据指令正确运动。
+1. The robot has a mobile base, camera, and RDK kit. The hardware is connected and tested.
+2. ROS low-level driver is available, and the robot can receive `/cmd_vel` commands for movement and move correctly according to the commands.
 
-### 机器人组装
-以下操作过程以OriginBot为例，满足条件的其他机器人使用方法类似。参考机器人官网的[使用指引](https://www.originbot.org/guide/quick_guide/)，完成机器人的硬件组装、镜像烧写及示例运行，确认机器人的基础功能可以顺利运行。
+### Robot Assembly
+The following steps are based on OriginBot, and similar methods can be applied to other robots that meet the conditions. Refer to the robot's official website's [usage guide](https://www.originbot.org/guide/quick_guide/) to complete the hardware assembly, image burning, and example operation of the robot, ensuring that the basic functions of the robot can run smoothly.
 
-### 安装功能包
-**1.参考[OriginBot说明](https://github.com/nodehubs/originbot_minimal/blob/develop/README.md)，完成OriginBot基础功能安装**
+### Installation of Function Packages
+**1. Refer to the [OriginBot instructions](https://github.com/nodehubs/originbot_minimal/blob/develop/README.md) to complete the installation of OriginBot's basic functions.**
 
-**2.安装功能包**
+**2. Installation of Function Packages**
 
-启动机器人后，通过终端或者VNC连接机器人，复制如下命令在RDK的系统上运行，完成相关Node的安装。
+After starting the robot, connect to the robot through the terminal or VNC, and run the following commands on the RDK system to install the relevant Nodes.
 
 ```bash
 sudo apt update
 sudo apt install -y tros-gesture-control
 ```
 
-### 运行手势控制功能
+### Running Gesture Control Function
 
-**1.启动机器人底盘**
-
-启动机器人，如OriginBot的启动命令如下：
+**1. Start the Robot Base**Start the robot, the launch command for OriginBot is as follows:
 
 ```bash
 source /opt/tros/setup.bash
 ros2 launch originbot_base robot.launch.py 
 ```
 
-**2.启动手势控制**
+**2. Start Gesture Control**
 
-启动一个新的终端，通过如下指令启动手势控制功能：
+Launch a new terminal and start gesture control using the following commands:
 ```shell
-# 配置tros.b环境
+# Configure the tros.b environment
 source /opt/tros/setup.bash
 
-# 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
+# Copy the necessary configuration files for running examples from the installation path of tros.b.
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
 cp -r /opt/tros/${TROS_DISTRO}/lib/hand_lmk_detection/config/ .
 cp -r /opt/tros/${TROS_DISTRO}/lib/hand_gesture_detection/config/ .
 
-# 配置MIPI摄像头
+# Configure the MIPI camera
 export CAM_TYPE=mipi
 
-# 运行launch文件
+# Run the launch file
 ros2 launch gesture_control gesture_control.launch.py
 ```
 
-启动成功后，站在机器人摄像头前，需要让机器人识别到手部，通过“666手势/Awesome”手势控制小车前进，“Yeah/Victory”手势控制小车后退，“大拇指向右/ThumbRight”手势控制小车右转，“大拇指向左/ThumbLeft”手势控制小车左转。**其中左转/右转分别是向人的左/右方向（大拇指的指向）转动**。
+Once successfully started, stand in front of the robot's camera and make sure the robot recognizes your hand gestures. Use "666/Awesome" gesture to make the robot move forward, "Yeah/Victory" gesture to make it move backward, "ThumbRight" gesture to turn the robot right, and "ThumbLeft" gesture to turn the robot left. **Note that left and right refer to the directions towards the person's left or right based on the direction of the thumb**.
 
 ![](./images/gesture_ctrl_bot.gif)
 
-**3.查看视觉识别效果**
+**3. View Visual Recognition Results**
 
-打开处于同一网络下电脑的浏览器，访问[http://IP:8000](http://IP:8000)即可看到视觉识别的实时效果，其中IP为RDK的IP地址。
+Open a web browser on a computer in the same network, access [http://IP:8000](http://IP:8000) to see real-time visual recognition results, where IP is the RDK's IP address.
 
 ![](./images/gesture_ctrl_web.gif)
 
-# Gazebo仿真
+# Gazebo Simulation
 
-Gazebo仿真适用于持有RDK X3但没有机器人实物的开发者体验功能。
+Gazebo simulation is suitable for developers who have an RDK X3 but do not have the physical robot to experience its functionality.
 
-## 物料清单
+## Bill of Materials
 
-| 机器人名称          | 生产厂家 | 参考链接                                                     |
-| :------------------ | -------- | ------------------------------------------------------------ |
-| RDK X3             | 多厂家 | [点击跳转](https://developer.horizon.cc/rdkx3) |
+| Robot Name          | Manufacturer | Reference Link                                               |
+| :------------------ | ------------ | ------------------------------------------------------------ |
+| RDK X3              | Multiple     | [Click to go](https://developer.horizon.cc/rdkx3)             |
 
-## 使用方法
+## Instructions
 
-### 准备工作
+### Preparatory WorkBefore experiencing, the following basic conditions are required:
 
-在体验之前，需要具备以下基本条件：
+- Developer has physical RDK kit and accompanying camera
+- Installation of ROS Gazebo and Turtlebot robot related packages on the PC has been completed
+- The PC is on the same network segment as the Horizon RDK (wired or connected to the same wireless network, the first three segments of the IP address must match). Environment packages that need to be installed on the PC side include:
 
-- 开发者有RDK套件实物，及配套的相机
-- PC电脑端已经完成ROS Gazebo及Turtlebot机器人相关功能包安装
-- 和地平线RDK在同一网段（有线或者连接同一无线网，IP地址前三段需保持一致）的PC，PC端需要安装的环境包括：
+  - Ubuntu 20.04 system
 
-  - Ubuntu 20.04系统
+  - [ROS2 Foxy desktop version](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html)
 
-  - [ROS2 Foxy桌面版](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html)
-
-  - Gazebo和Turtlebot3相关的功能包，安装方法：
+  - Gazebo and Turtlebot3 related packages, installation method:
 
    ```shell
    sudo apt-get install ros-foxy-gazebo-*
@@ -117,20 +114,20 @@ Gazebo仿真适用于持有RDK X3但没有机器人实物的开发者体验功�
    sudo apt install ros-foxy-turtlebot3-simulations
    ```
 
-### 安装功能包
+### Installing packages
 
-启动RDK X3后，通过终端或者VNC连接机器人，复制如下命令在RDK的系统上运行，完成手势控制相关Node的安装。
+After starting RDK X3, connect to the robot via terminal or VNC, copy and run the following command on the RDK system to install the nodes related to gesture control.
 
 ```bash
 sudo apt update
 sudo apt install -y tros-gesture-control
 ```
 
-### 运行手势控制功能
+### Running gesture control
 
-**1.启动仿真环境及机器人**
+**1. Start simulation environment and robot**
 
-在PC端Ubuntu的终端中使用如下命令启动Gazebo，并加载机器人模型：
+In the terminal of Ubuntu on the PC side, use the following command to start Gazebo and load the robot model:
 
 ```bash
 source /opt/ros/foxy/setup.bash
@@ -138,81 +135,80 @@ export TURTLEBOT3_MODEL=burger
 ros2 launch turtlebot3_gazebo empty_world.launch.py
 ```
 
-启动成功后，仿真环境中小车效果如下：
+Once successfully started, the effect of the car in the simulation environment is as follows:
 
 ![](./images/gazebo.jpeg)
 
-**2.启动手势控制**
+**2. Start gesture control**
 
-在RDK的系统中，启动终端，通过如下指令启动功能：
+On the RDK system, start a terminal and initiate the function with the following command:
 
 ```shell
-# 配置tros.b环境
+# Configure the tros.b environment```
 source /opt/tros/setup.bash
 
-# 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
+# Copy the configuration files required for running the example from the installation path of tros.b.
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
 cp -r /opt/tros/${TROS_DISTRO}/lib/hand_lmk_detection/config/ .
 cp -r /opt/tros/${TROS_DISTRO}/lib/hand_gesture_detection/config/ .
 
-# 配置MIPI摄像头
+# Configure MIPI camera
 export CAM_TYPE=mipi
 
-# 运行launch文件
+# Run the launch file
 ros2 launch gesture_control gesture_control.launch.py
 ```
 
-启动成功后，站在机器人摄像头前，需要让机器人识别到手部，通过“666手势/Awesome”手势控制小车前进，“yeah/Victory”手势控制小车后退，“大拇指向右/ThumbRight”手势控制小车右转，“大拇指向左/ThumbLeft”手势控制小车左转。**其中左转/右转分别是向人的左/右方向（大拇指的指向）转动**，效果[点击跳转](https://developer.horizon.cc/documents_tros/apps/car_gesture_control)。
+After successful startup, stand in front of the robot's camera and let the robot recognize your hand gestures. Use the following gestures to control the robot: "666 gesture/Awesome" to move the car forward, "yeah/Victory" to move the car backward, "ThumbRight" to turn the car right, and "ThumbLeft" to turn the car left. **Note: "left" and "right" refer to the left and right directions as indicated by the position of your thumb.** See the effect [here](https://developer.horizon.cc/documents_tros/apps/car_gesture_control).
 
-**3.查看视觉识别效果**
+**3. View Visual Recognition Results**
 
-打开同一网络电脑的浏览器,访问[http://IP:8000](http://IP:8000)即可看到视觉识别的实时效果，其中IP为RDK的IP地址。 
+Open a browser on a computer connected to the same network, visit [http://IP:8000](http://IP:8000) to see real-time visual recognition results, where IP is the IP address of RDK.
 
-# 接口说明
+# Interface Specification
 
-## 订阅话题
+## Subscribed Topics
 
-| 名称                          | 消息类型                                                     | 说明                                                   |
-| ----------------------------- | ------------------------------------------------------------ | ------------------------------------------------------ |
-| /hobot_hand_gesture_detection   | [hobot_msgs/ai_msgs/msg/PerceptionTargets](https://github.com/HorizonRDK/hobot_msgs/blob/develop/ai_msgs/msg/PerceptionTargets.msg)     | 识别到的手势信息   |
+| Name                          | Message Type                                                  | Description                                         |
+| ----------------------------- | ------------------------------------------------------------ | --------------------------------------------------- |
+| /hobot_hand_gesture_detection | [hobot_msgs/ai_msgs/msg/PerceptionTargets](https://github.com/HorizonRDK/hobot_msgs/blob/develop/ai_msgs/msg/PerceptionTargets.msg) | Information of recognized gestures |
 
-## 发布话题
+## Published Topics
 
-| 名称                          | 消息类型                                                      | 说明                                |
-| ----------------------------- | ------------------------------------------------------------ | ------------------------------------------------------ |
-| /cmd_vel                      | geometry_msgs/msg/Twist                                      | 发布控制机器人移动的速度指令              |
+| Name       | Message Type             | Description                              |
+| ---------- | ------------------------ | ---------------------------------------- |
+| /cmd_vel   | geometry_msgs/msg/Twist | Publishes velocity commands for robot movements |
 
-## 参数
+## Parameters
 
-| 参数名                    | 类型        | 解释     | 是否必须 | 支持的配置       | 默认值         |
-| ------------------------ | ----------- | -------- | ------- | -------------- | -------------- | 
-| track_serial_lost_num_thr | int         | 目标连续消失帧数阈值。<br>超过此阈值认为目标消失。 | 否       | 无限制                                                                                                  | 100                           |
-| activate_wakeup_gesture   | int         | 是否启用唤醒手势。                             | 否       | 0：不启用<br>1：启用。                                                                               | 0                             |
-| move_step                 | float       | 线速度，单位米/秒。                       | 否       | 无限制                                                                                                  | 0.1                           |
-| rotate_step               | float       | 角速度，单位弧度/秒。                     | 否       | 无限制                                                                                                  | 0.5                           |
-| twist_pub_topic_name      | std::string | 发布Twist类型的运动控制消息的topic名           | 否       | 根据实际部署环境配置。<br>一般机器人订阅的topic为`/cmd_vel`，ROS2 turtlesim示例订阅的topic为`turtle1/cmd_vel`。 | /cmd_vel                      |
-| ai_msg_sub_topic_name     | std::string | 订阅包含手势识别结果消息的topic名          | 否       | 根据实际部署环境配置                                                                                    | /hobot_hand_gesture_detection |
+| Parameter Name            | Type        | Description                                 | Mandatory | Supported Configurations | Default Value |
+| ------------------------- | ----------- | ------------------------------------------- | --------- | -----------------------  | ------------- |
+| track_serial_lost_num_thr | int         | Threshold for consecutive lost frames of target.<br>If exceeded, the target is considered lost. | No        | Unlimited                | 100           |
+| activate_wakeup_gesture   | int         | Whether to enable wake-up gesture.          | No        | 0: Disabled<br>1: Enabled | 0             |
+| move_step                 | float       | Linear velocity in meters per second.        | No        | Unlimited                | 0.1           |
+| rotate_step               | float       | Angular velocity in radians per second.      | No        | Unlimited                | 0.5           |
+| twist_pub_topic_name      | std::string | Topic name for publishing motion control messages of type Twist | No        | Configured based on deployment environment.<br>Generally, the topic subscribed by the robot is `/cmd_vel`, and in ROS2 turtlesim example, it is `turtle1/cmd_vel`. | /cmd_vel     |
+| ai_msg_sub_topic_name     | std::string | Topic name for subscribing messages containing gesture recognition results | No        | Configured based on deployment environment | /hobot_hand_gesture_detection |
 
-# 原理简介
-手势控制机器人功能由MIPI图像采集、人体检测和跟踪、人手关键点检测、手势识别、手势控制策略、图像编码、Web展示端组成，流程如下图：
+# Principle Overview
+The functionality of controlling the robot through gestures is composed of MIPI image acquisition, human body detection and tracking, hand keypoint detection, gesture recognition, gesture control strategy, image encoding, and web display end. The workflow is shown in the following diagram:
 
 ![](./images/gesture_ctrl_workflow.jpg)
+```# Reference
 
-# 参考资料
+Gesture Control Reference: [Developer Talk | Horizon Programmer Dad Takes You on a Tour of Robot Development Platform - Episode 1 Gesture Control](https://developer.horizon.cc/forumDetail/98129540173361326) 
 
-手势控制参考：[开发者说 | 地平线程序员奶爸带你玩转机器人开发平台 —— 第一期 手势控制](https://developer.horizon.cc/forumDetail/98129540173361326) 
+# Frequently Asked Questions
 
-# 常见问题
+1. Error when running startup command under Ubuntu `-bash: ros2: command not found`
 
-1. Ubuntu下运行启动命令报错`-bash: ros2: command not found`
-
-当前终端未设置tros.b环境，执行命令配置环境：
+Current terminal is not set to the tros.b environment. Execute the following command to configure the environment:
 
 ```
 source /opt/tros/setup.bash
 ```
 
-在当前终端执行ros2命令确认当前终端环境是否生效：
+Execute `ros2` command in the current terminal to confirm if the terminal environment is effective:
 
 ```
 # ros2
@@ -224,16 +220,16 @@ optional arguments:
   -h, --help            show this help message and exit
 ```
 
-如果输出以上信息，说明ros2环境配置成功。
+If the above information is output, it indicates that the ros2 environment is configured successfully.
 
-***注意！对于每个新打开的终端，都需要重新设置tros.b环境。***
+***Note! For each newly opened terminal, the tros.b environment needs to be set again.***
 
-2. 做出控制手势，机器人无反应
+2. No response from the robot when making control gestures
 
-- 确认是否有运动控制消息发布
+- Confirm if there is motion control message publishing
 
-在RDK的系统中，启动终端，使用`ros2 topic echo /cmd_vel`命令确认是否有`/cmd_vel`话题消息发布，如果无，再确认是否识别到手势。
+In the RDK system, start the terminal and use the command `ros2 topic echo /cmd_vel` to confirm if the topic message `/cmd_vel` is being published. If not, then confirm if the gesture is being detected.
 
-- 检查是否识别到手势
+- Check if the gesture is recognized
 
-做出控制手势后，查看输出log中“tracking_sta”关键字值是否为1，同时gesture值是否大于0，或者查看电脑浏览器上是否有手势识别渲染结果，否则按照“功能介绍”部分手势动作举例确认手势是否标准。
+After making a control gesture, check if the value of the keyword "tracking_sta" in the output log is 1, at the same time, whether the gesture value is greater than 0. Also, check if there are gesture recognition rendering results on the computer browser, otherwise follow the example of gesture actions in the "Features Introduction" section to confirm if the gesture is standard.
