@@ -194,7 +194,7 @@ Open a browser on a computer connected to the same network, visit [http://IP:800
 The functionality of controlling the robot through gestures is composed of MIPI image acquisition, human body detection and tracking, hand keypoint detection, gesture recognition, gesture control strategy, image encoding, and web display end. The workflow is shown in the following diagram:
 
 ![](./images/gesture_ctrl_workflow.jpg)
-```# Reference
+# Reference
 
 Gesture Control Reference: [Developer Talk | Horizon Programmer Dad Takes You on a Tour of Robot Development Platform - Episode 1 Gesture Control](https://developer.horizon.cc/forumDetail/98129540173361326) 
 
