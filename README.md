@@ -41,26 +41,59 @@ The following steps are based on OriginBot, and similar methods can be applied t
 
 After starting the robot, connect to the robot through the terminal or VNC, and run the following commands on the RDK system to install the relevant Nodes.
 
+tros foxy:
 ```bash
 sudo apt update
 sudo apt install -y tros-gesture-control
+```
+
+tros humble:
+```bash
+sudo apt update
+sudo apt install -y tros-humble-gesture-control
 ```
 
 ### Running Gesture Control Function
 
 **1. Start the Robot Base**Start the robot, the launch command for OriginBot is as follows:
 
+tros foxy:
 ```bash
 source /opt/tros/setup.bash
+ros2 launch originbot_base robot.launch.py 
+```
+
+tros humble:
+```bash
+source /opt/tros/humble/setup.bash
 ros2 launch originbot_base robot.launch.py 
 ```
 
 **2. Start Gesture Control**
 
 Launch a new terminal and start gesture control using the following commands:
+
+tros foxy:
 ```shell
 # Configure the tros.b environment
 source /opt/tros/setup.bash
+
+# Copy the necessary configuration files for running examples from the installation path of tros.b.
+cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/hand_lmk_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/hand_gesture_detection/config/ .
+
+# Configure the MIPI camera
+export CAM_TYPE=mipi
+
+# Run the launch file
+ros2 launch gesture_control gesture_control.launch.py
+```
+
+tros humble:
+```shell
+# Configure the tros.b humble environment
+source /opt/tros/humble/setup.bash
 
 # Copy the necessary configuration files for running examples from the installation path of tros.b.
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
@@ -102,6 +135,7 @@ Gazebo simulation is suitable for developers who have an RDK X3 but do not have 
 - Installation of ROS Gazebo and Turtlebot robot related packages on the PC has been completed
 - The PC is on the same network segment as the Horizon RDK (wired or connected to the same wireless network, the first three segments of the IP address must match). Environment packages that need to be installed on the PC side include:
 
+tros foxy:
   - Ubuntu 20.04 system
 
   - [ROS2 Foxy desktop version](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html)
@@ -114,13 +148,33 @@ Gazebo simulation is suitable for developers who have an RDK X3 but do not have 
    sudo apt install ros-foxy-turtlebot3-simulations
    ```
 
+tros humble:
+  - Ubuntu 22.04 system
+
+  - [ROS2 Humble desktop version](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html)
+
+  - Gazebo and Turtlebot3 related packages, installation method:
+
+   ```shell
+   sudo apt-get install ros-humble-gazebo-*
+   sudo apt install ros-humble-turtlebot3
+   sudo apt install ros-humble-turtlebot3-simulations
+   ```
+
 ### Installing packages
 
 After starting RDK X3, connect to the robot via terminal or VNC, copy and run the following command on the RDK system to install the nodes related to gesture control.
 
+tros foxy:
 ```bash
 sudo apt update
 sudo apt install -y tros-gesture-control
+```
+
+tros humble:
+```bash
+sudo apt update
+sudo apt install -y tros-humble-gesture-control
 ```
 
 ### Running gesture control
@@ -129,8 +183,16 @@ sudo apt install -y tros-gesture-control
 
 In the terminal of Ubuntu on the PC side, use the following command to start Gazebo and load the robot model:
 
+tros foxy:
 ```bash
 source /opt/ros/foxy/setup.bash
+export TURTLEBOT3_MODEL=burger
+ros2 launch turtlebot3_gazebo empty_world.launch.py
+```
+
+tros humble:
+```bash
+source /opt/ros/humble/setup.bash
 export TURTLEBOT3_MODEL=burger
 ros2 launch turtlebot3_gazebo empty_world.launch.py
 ```
@@ -143,9 +205,27 @@ Once successfully started, the effect of the car in the simulation environment i
 
 On the RDK system, start a terminal and initiate the function with the following command:
 
+tros foxy:
 ```shell
 # Configure the tros.b environment```
 source /opt/tros/setup.bash
+
+# Copy the configuration files required for running the example from the installation path of tros.b.
+cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/hand_lmk_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/hand_gesture_detection/config/ .
+
+# Configure MIPI camera
+export CAM_TYPE=mipi
+
+# Run the launch file
+ros2 launch gesture_control gesture_control.launch.py
+```
+
+tros humble:
+```shell
+# Configure the tros.b humble environment```
+source /opt/tros/humble/setup.bash
 
 # Copy the configuration files required for running the example from the installation path of tros.b.
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
@@ -204,8 +284,14 @@ Gesture Control Reference: [Developer Talk | Horizon Programmer Dad Takes You on
 
 Current terminal is not set to the tros.b environment. Execute the following command to configure the environment:
 
+tros foxy:
 ```
 source /opt/tros/setup.bash
+```
+
+tros humble:
+```
+source /opt/tros/humble/setup.bash
 ```
 
 Execute `ros2` command in the current terminal to confirm if the terminal environment is effective:

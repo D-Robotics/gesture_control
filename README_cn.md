@@ -42,9 +42,16 @@
 
 启动机器人后，通过终端或者VNC连接机器人，复制如下命令在RDK的系统上运行，完成相关Node的安装。
 
+tros foxy 版本
 ```bash
 sudo apt update
 sudo apt install -y tros-gesture-control
+```
+
+tros humble 版本
+```bash
+sudo apt update
+sudo apt install -y tros-humble-gesture-control
 ```
 
 ### 运行手势控制功能
@@ -53,17 +60,43 @@ sudo apt install -y tros-gesture-control
 
 启动机器人，如OriginBot的启动命令如下：
 
+tros foxy 版本
 ```bash
 source /opt/tros/setup.bash
+ros2 launch originbot_base robot.launch.py 
+```
+
+tros humble 版本
+```bash
+source /opt/tros/humble/setup.bash
 ros2 launch originbot_base robot.launch.py 
 ```
 
 **2.启动手势控制**
 
 启动一个新的终端，通过如下指令启动手势控制功能：
+
+tros foxy 版本
 ```shell
 # 配置tros.b环境
 source /opt/tros/setup.bash
+
+# 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
+cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/hand_lmk_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/hand_gesture_detection/config/ .
+
+# 配置MIPI摄像头
+export CAM_TYPE=mipi
+
+# 运行launch文件
+ros2 launch gesture_control gesture_control.launch.py
+```
+
+tros humble 版本
+```shell
+# 配置tros.b humble环境
+source /opt/tros/humble/setup.bash
 
 # 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
@@ -107,6 +140,7 @@ Gazebo仿真适用于持有RDK X3但没有机器人实物的开发者体验功�
 - PC电脑端已经完成ROS Gazebo及Turtlebot机器人相关功能包安装
 - 和地平线RDK在同一网段（有线或者连接同一无线网，IP地址前三段需保持一致）的PC，PC端需要安装的环境包括：
 
+tros foxy 版本
   - Ubuntu 20.04系统
 
   - [ROS2 Foxy桌面版](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html)
@@ -119,13 +153,33 @@ Gazebo仿真适用于持有RDK X3但没有机器人实物的开发者体验功�
    sudo apt install ros-foxy-turtlebot3-simulations
    ```
 
+tros humble 版本
+  - Ubuntu 22.04系统
+
+  - [ROS2 Humble桌面版](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html)
+
+  - Gazebo和Turtlebot3相关的功能包，安装方法：
+
+   ```shell
+   sudo apt-get install ros-humble-gazebo-*
+   sudo apt install ros-humble-turtlebot3
+   sudo apt install ros-humble-turtlebot3-simulations
+   ```
+
 ### 安装功能包
 
 启动RDK X3后，通过终端或者VNC连接机器人，复制如下命令在RDK的系统上运行，完成手势控制相关Node的安装。
 
+tros foxy 版本
 ```bash
 sudo apt update
 sudo apt install -y tros-gesture-control
+```
+
+tros humble 版本
+```bash
+sudo apt update
+sudo apt install -y tros-humble-gesture-control
 ```
 
 ### 运行手势控制功能
@@ -134,8 +188,16 @@ sudo apt install -y tros-gesture-control
 
 在PC端Ubuntu的终端中使用如下命令启动Gazebo，并加载机器人模型：
 
+tros foxy 版本
 ```bash
 source /opt/ros/foxy/setup.bash
+export TURTLEBOT3_MODEL=burger
+ros2 launch turtlebot3_gazebo empty_world.launch.py
+```
+
+tros humble 版本
+```bash
+source /opt/ros/humble/setup.bash
 export TURTLEBOT3_MODEL=burger
 ros2 launch turtlebot3_gazebo empty_world.launch.py
 ```
@@ -148,9 +210,27 @@ ros2 launch turtlebot3_gazebo empty_world.launch.py
 
 在RDK的系统中，启动终端，通过如下指令启动功能：
 
+tros foxy 版本
 ```shell
 # 配置tros.b环境
 source /opt/tros/setup.bash
+
+# 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
+cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/hand_lmk_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/hand_gesture_detection/config/ .
+
+# 配置MIPI摄像头
+export CAM_TYPE=mipi
+
+# 运行launch文件
+ros2 launch gesture_control gesture_control.launch.py
+```
+
+tros humble 版本
+```shell
+# 配置tros.b humble环境
+source /opt/tros/humble/setup.bash
 
 # 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
@@ -210,8 +290,14 @@ ros2 launch gesture_control gesture_control.launch.py
 
 当前终端未设置tros.b环境，执行命令配置环境：
 
+tros foxy 版本
 ```
 source /opt/tros/setup.bash
+```
+
+tros humble 版本
+```
+source /opt/tros/humble/setup.bash
 ```
 
 在当前终端执行ros2命令确认当前终端环境是否生效：
