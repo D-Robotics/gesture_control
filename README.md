@@ -125,7 +125,7 @@ Gazebo simulation is suitable for developers who have an RDK X3 but do not have 
 
 | Robot Name          | Manufacturer | Reference Link                                               |
 | :------------------ | ------------ | ------------------------------------------------------------ |
-| RDK X3              | Multiple     | [Click to go](https://developer.horizon.cc/rdkx3)             |
+| RDK X3              | Multiple     | [Click to go](https://developer.d-robotics.cc/rdkx3)             |
 
 ## Instructions
 
@@ -133,7 +133,7 @@ Gazebo simulation is suitable for developers who have an RDK X3 but do not have 
 
 - Developer has physical RDK kit and accompanying camera
 - Installation of ROS Gazebo and Turtlebot robot related packages on the PC has been completed
-- The PC is on the same network segment as the Horizon RDK (wired or connected to the same wireless network, the first three segments of the IP address must match). Environment packages that need to be installed on the PC side include:
+- The PC is on the same network segment as the RDK (wired or connected to the same wireless network, the first three segments of the IP address must match). Environment packages that need to be installed on the PC side include:
 
 tros foxy:
   - Ubuntu 20.04 system
@@ -251,7 +251,7 @@ Open a browser on a computer connected to the same network, visit [http://IP:800
 
 | Name                          | Message Type                                                  | Description                                         |
 | ----------------------------- | ------------------------------------------------------------ | --------------------------------------------------- |
-| /hobot_hand_gesture_detection | [hobot_msgs/ai_msgs/msg/PerceptionTargets](https://github.com/HorizonRDK/hobot_msgs/blob/develop/ai_msgs/msg/PerceptionTargets.msg) | Information of recognized gestures |
+| /hobot_hand_gesture_detection | [hobot_msgs/ai_msgs/msg/PerceptionTargets](https://github.com/D-Robotics/hobot_msgs/blob/develop/ai_msgs/msg/PerceptionTargets.msg) | Information of recognized gestures |
 
 ## Published Topics
 
