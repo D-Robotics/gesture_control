@@ -24,6 +24,11 @@ The following robots are all compatible with RDK X3.
 | Tracked Smart Car     | Wei Xue Electronics | [Click to jump](https://detail.tmall.com/item.htm?abbucket=9&id=696078152772&rn=4d81bea40d392509d4a5153fb2c65a35&spm=a1z10.5-b-s.w4011-22714387486.159.12d33742lJtqRk) |
 | RDK X3 Robot          | YahBot Intelligence | [Click to jump](https://detail.tmall.com/item.htm?id=726857243156&scene=taobao_shop&spm=a1z10.1-b-s.w5003-22651379998.21.421044e12Yqrjm) |
 
+The following robots are all compatible with RDK X5.
+| Robot Name          | Manufacturer | Reference Link                                                |
+| :------------------ | ----------- | ------------------------------------------------------------- |
+| OriginBot Smart Robot | Gu Yue Ju  | [Click to jump](https://www.originbot.org/)                   |
+
 ## Instructions on Use
 
 ### Preparation
@@ -119,7 +124,7 @@ Open a web browser on a computer in the same network, access [http://IP:8000](ht
 
 # Gazebo Simulation
 
-Gazebo simulation is suitable for developers who have an RDK X3 but do not have the physical robot to experience its functionality.
+Gazebo simulation is suitable for developers who have an RDK but do not have the physical robot to experience its functionality.
 
 ## Bill of Materials
 
@@ -163,7 +168,7 @@ tros humble:
 
 ### Installing packages
 
-After starting RDK X3, connect to the robot via terminal or VNC, copy and run the following command on the RDK system to install the nodes related to gesture control.
+After starting RDK, connect to the robot via terminal or VNC, copy and run the following command on the RDK system to install the nodes related to gesture control.
 
 tros foxy:
 ```bash
